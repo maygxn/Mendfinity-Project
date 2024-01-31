@@ -1,0 +1,9 @@
+.navbar {
+    background-color: rgb(39, 39, 39);
+    align-items: center;
+    color: white;
+    justify-content: space-between;
+    border-bottom: 1px solid grey;
+    width: 100%;
+    margin: 0;
+}
