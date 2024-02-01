@@ -1,9 +1,12 @@
 import React from 'react';
-import MainPageNav from './MainPageNav';
+import MainPageNavBar from './MainPageNavBar';
 
 function MainPage() {
+    const url = "http://127.0.0.1:5555"
     return (
-        <div><MainPageNav /></div>
+        <div>
+            <div><MainPageNavBar /></div>
+        </div>
     )
 }
 
