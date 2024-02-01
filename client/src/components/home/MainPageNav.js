@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function MainPageNavBar() {
+function MainPageNav() {
     const navigate = useNavigate();
 
     const navigateToHome = () => {
@@ -33,4 +33,4 @@ function MainPageNavBar() {
     );
 }
 
-export default MainPageNavBar;
+export default MainPageNav;

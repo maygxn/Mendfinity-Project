@@ -3,7 +3,49 @@
     align-items: center;
     color: white;
     justify-content: space-between;
+    padding: 10px 20px;
     border-bottom: 1px solid grey;
+    position: relative;
     width: 100%;
+}
+
+.navbar h1,
+.navbar p {
+    font-size: 24px;
+    font-weight: bold;
     margin: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.navbar button {
+    background-color: transparent;
+    color: white;
+    border: 1px solid grey;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar button:hover {
+    background-color: grey;
+    color: black;
 }
