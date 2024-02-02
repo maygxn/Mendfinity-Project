@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ExercisesSideBar from "./ExercisesSideBar";
+import ExercisesCards from './ExercisesCards';
 import ExercisesNav from './ExercisesNav';
+import './ExercisesPage.css';
 
 function ExercisesPage() {
+    const [exercises, setExercises] = useState([]);
 
-    const url = "http://127.0.0.1:5555"
+    useEffect(() => {
+        fetch("http://127.0.0.1:5555/exercises")
+            .then(response => response.json())
+            .then(data => setExercises(data));
+    }, []);
+
+    const handleNewExerciseClick = () => {
+        console.log("Add new exercise logic here.");
+    };
 
     return (
-        <div>
+        <>
             <ExercisesNav />
-        </div>
-    )
+            <ExercisesSideBar handleNewExerciseClick={handleNewExerciseClick} />
+            <div className="main-content">
+                {exercises.map((exercise) => (
+                    <ExercisesCards key={exercise.id} exercise={exercise} />
+                ))}
+            </div>
+        </>
+    );
 }
 
 export default ExercisesPage;
