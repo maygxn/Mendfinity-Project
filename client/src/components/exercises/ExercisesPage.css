@@ -1,10 +1,9 @@
-/* Container holding both the sidebar and main content for proper alignment */
 .container {
     display: flex;
     width: 100%;
 }
 
-/* Sidebar styling */
+
 .sidebar {
     width: 200px;
     height: calc(100vh - 50px);
@@ -16,7 +15,7 @@
     overflow-y: auto;
 }
 
-/* Main content area where cards are displayed */
+
 .main-content {
     margin-left: 200px;
     padding: 20px;
@@ -25,7 +24,7 @@
     gap: 20px;
 }
 
-/* Individual card styling */
+
 .card {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -33,37 +32,27 @@
     padding: 20px;
     text-align: center;
     flex: 0 1 calc(30% - 20px);
-    /* Three cards per row, adjust margin/gap */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Align items (including the image) to the center */
 }
 
 .card img {
     width: 100%;
-    /* Make the image width responsive to the card's width */
     max-height: 200px;
-    /* Set a maximum height to prevent the image from getting too tall */
     object-fit: contain;
-    /* Show the whole image without cropping */
     border-radius: 5px;
-    /* Rounded corners for the image to match the card */
     margin-bottom: 15px;
-    /* Space between the image and text below it */
     background-color: #f0f0f0;
-    /* Light background to fill the empty space if any */
 }
 
 
-/* Responsive adjustments for medium screens - Two cards per row */
 @media (max-width: 768px) {
     .card {
         flex: 0 1 calc(50% - 20px);
     }
 }
 
-/* Responsive adjustments for small screens - One card per row */
 @media (max-width: 480px) {
     .container {
         flex-direction: column;
@@ -81,5 +70,33 @@
 
     .card {
         flex: 0 1 100%;
+    }
+}
+
+.form-container {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    width: 300px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    z-index: 999;
+}
+
+
+@media (max-width: 768px) {
+    .form-container {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .form-container {
+        margin-left: 0;
+        width: 100%;
     }
 }

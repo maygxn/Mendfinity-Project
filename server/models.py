@@ -23,8 +23,8 @@ class Exercise(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
-    image_url = db.Column(db.String(255))
+    description = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String, nullable=True)
 
     # Relationships
     favorite_exercises = db.relationship('FavoriteExercise', back_populates='exercise',)

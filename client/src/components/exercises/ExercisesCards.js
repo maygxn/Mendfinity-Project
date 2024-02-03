@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ExercisesCards({ exercise }) {
+function ExercisesCards({ exercise, onEdit, onDelete }) {
     return (
         <div className="card">
             <div className='image-container'>
@@ -8,6 +8,8 @@ function ExercisesCards({ exercise }) {
             </div>
             <h3>{exercise.name}</h3>
             <p>{exercise.description}</p>
+            <button onClick={() => onEdit(exercise)}>Edit</button>
+            <button onClick={() => onDelete(exercise.id)}>Delete</button>
         </div>
     );
 }

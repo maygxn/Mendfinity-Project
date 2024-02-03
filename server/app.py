@@ -27,17 +27,93 @@ def patients_by_id(id):
     return response
 
 # list all exercises
-@app.route("/exercises", methods=['GET'])
+@app.route("/exercises", methods=['GET', 'POST'])
 def exercises():
-    exercises = Exercise.query.all()
 
-    exercises_dict = [exercise.to_dict(rules = ("-patient", "-favorite_exercises", "-health_journal_entries" )) for exercise in exercises]
+    if request.method == "GET":
 
-    response = make_response(
-        exercises_dict,
-        200
-    )
+        exercises = Exercise.query.all()
+
+        exercises_dict = [exercise.to_dict(rules = ("-patient", "-favorite_exercises", "-health_journal_entries" )) for exercise in exercises]
+
+        response = make_response(
+            exercises_dict,
+            200
+        )
+
+    elif request.method == "POST":
+
+        form_data = request.get_json()
+
+        new_exercise = Exercise(
+            name = form_data['name'],
+            description = form_data['description'],
+            image_url = form_data['image_url']
+        )
+
+        db.session.add(new_exercise)
+        db.session.commit()
+
+        response = make_response(
+            new_exercise.to_dict(),
+            201
+        )
+    else:
+        response = make_response(
+            {"error": "invalid method"},
+            400
+        )
+
     return response
+
+@app.route("/exercises/<int:id>", methods=["GET", "PATCH", "DELETE"])
+def exercises_by_id(id):
+
+    exercise = Exercise.query.filter(Exercise.id == id).first()
+
+    if exercise:
+
+        if request.method == "GET":
+
+            response = make_response(
+                exercise.to_dict(),
+                200
+            )
+
+        elif request.method == "PATCH":
+
+            form_data = request.get_json()
+
+            for key in form_data:
+                setattr(exercise, key, form_data[key])
+
+            db.session.commit()
+
+            response = make_response(
+                exercise.to_dict(),
+                200
+            )
+
+        elif request.method == "DELETE":
+
+            db.session.delete(exercise)
+            db.session.commit()
+
+            response = make_response(
+                {},
+                204
+            )
+
+    else:
+
+        response = make_response(
+            {"error" : "invalid ID"},
+            404
+        )
+
+    return response
+
+
 
 # manage favorite exercises
 @app.route("/favorite-exercises", methods=['GET', 'POST'])
@@ -166,10 +242,6 @@ def health_journal_entry_by_id(entry_id):
         )
 
     return response
-
-
-
-
 
 
 
