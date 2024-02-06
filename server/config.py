@@ -14,4 +14,4 @@ app.secret_key = 'd6514cc60c0a6765ca0d5f269b67c774'  # Replace with the key gene
 
 migrate = Migrate(app, db)
 db.init_app(app)
-CORS(app, supports_credentials=True, resources={r"*": {"origins": "http://localhost:3000"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})

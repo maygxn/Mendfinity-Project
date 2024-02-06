@@ -1,6 +1,7 @@
 from config import app
 from models import db, Patient, Exercise, FavoriteExercise, HealthJournalEntry
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 if __name__ == '__main__':
     with app.app_context():
         print("deleting tables...")
@@ -13,9 +14,9 @@ if __name__ == '__main__':
 
         # Create some patients
         patients = [
-            Patient(username="john doe"),
-            Patient(username="jane doe")
-        ]
+            Patient(username="johntest", password_hash=generate_password_hash("123")),
+            Patient(username="janetest", password_hash=generate_password_hash("123"))
+            ]
         db.session.add_all(patients)
         db.session.commit()
 

@@ -1,5 +1,6 @@
 import React from "react";
 import HealthJournalNav from "./HealthJournalNav";
+import HealthJournalEntryList from "./HealthJournalEntryList";
 import LoginPage from "../login/LoginPage";
 
 function HealthJournalPage() {
@@ -7,6 +8,7 @@ function HealthJournalPage() {
     <>
       <HealthJournalNav />
       <div className="form-container"></div>
+      <HealthJournalEntryList />
     </>
   );
 }

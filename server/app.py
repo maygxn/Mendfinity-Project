@@ -235,24 +235,25 @@ def patient_favorite_exercises(patient_id):
 # CRUD for health journal entry for patient
 @app.route('/health-journal-entries', methods=['GET', 'POST'])
 def health_journal_entries():
-    if request.method == 'GET':
-        patient_id = request.args.get('patient_id')
-        # Check for 'undefined' or None patient_id
-        if patient_id in (None, 'undefined'):
-            return jsonify({"error": "Valid patient_id is required"}), 400
+    # Retrieve patient_id from the session
+    patient_id = session.get('patient_id')
+    if not patient_id:
+        return jsonify({"error": f'User {patient_id} not logged in for session {str(session)}'}), 401
 
-        entries = HealthJournalEntry.query.filter_by(patient_id=patient_id).all() if patient_id else HealthJournalEntry.query.all()
+    if request.method == 'GET':
+        # Use the patient_id from the session to filter journal entries
+        entries = HealthJournalEntry.query.filter_by(patient_id=patient_id).all()
         entries_dict = [entry.to_dict() for entry in entries]
         return jsonify(entries_dict), 200
 
     elif request.method == 'POST':
+        # No need to get patient_id from form_data, as it's already in the session
         form_data = request.get_json()
-        patient_id = form_data.get('patient_id')
-
-        if not patient_id or patient_id == 'undefined':
-            return jsonify({"error": "patient_id is required"}), 400
-
-        new_entry = HealthJournalEntry(patient_id=patient_id, content=form_data['content'], entry_date=form_data['entry_date'])
+        new_entry = HealthJournalEntry(
+            patient_id=patient_id,
+            content=form_data.get('content'),
+            entry_date=form_data.get('entry_date')
+        )
         db.session.add(new_entry)
         db.session.commit()
         return jsonify(new_entry.to_dict()), 201
