@@ -1,3 +1,4 @@
+// ExercisesPage.js
 import React, { useState, useEffect } from "react";
 import ExercisesSideBar from "./ExercisesSideBar";
 import ExercisesCards from "./ExercisesCards";
