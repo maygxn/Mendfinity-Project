@@ -1,19 +1,14 @@
-// src/components/healthjournal/HealthJournalPage.js
-
-import React from 'react';
-import HealthJournalNav from './HealthJournalNav';
+import React from "react";
+import HealthJournalNav from "./HealthJournalNav";
+import LoginPage from "../login/LoginPage";
 
 function HealthJournalPage() {
-
-
-
-    return (
-        <>
-            <HealthJournalNav />
-            <div className="form-container">
-            </div>
-        </>
-    );
+  return (
+    <>
+      <HealthJournalNav />
+      <div className="form-container"></div>
+    </>
+  );
 }
 
 export default HealthJournalPage;

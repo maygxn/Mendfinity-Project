@@ -57,17 +57,32 @@ def logout():
 
 
 # list all patients
-@app.route("/patients", methods=['GET'])
+@app.route("/patients", methods=['GET', 'POST'])
 def patients():
-    patients = Patient.query.all()
+    if request.method == "GET":
 
-    patients_dict = [patient.to_dict(rules = ("-favorite_exercises", "-exercise", "-health_journal_entries")) for patient in patients]
+        patients = Patient.query.all()
 
-    response = make_response(
-        patients_dict,
-        200
-    )
+        patients_dict = [patient.to_dict(rules = ("-favorite_exercises", "-exercise", "-health_journal_entries")) for patient in patients]
+
+        response = make_response(
+            patients_dict,
+            200
+        )
+    elif request.method == "POST":
+        form_data = request.get_json()
+
+        new_patient = Patient(username=form_data["username"], password=form_data["password"])
+
+        db.session.add(new_patient)
+        db.session.commit()
+
+        response = make_response(
+            new_patient.to_dict(),
+            201
+        )
     return response
+
 
 # get single patient by ID
 @app.route("/patients/<int:id>", methods=['GET'])

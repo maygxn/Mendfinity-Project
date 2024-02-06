@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 
-function LoginForm() {
+function RegisterForm() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -30,7 +30,7 @@ function LoginForm() {
     onSubmit: (values) => {
       setSubmitting(true);
       setError(""); // Reset error state on new submission
-      fetch("http://127.0.0.1:5555/login", {
+      fetch("http://127.0.0.1:5555/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,4 +90,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
