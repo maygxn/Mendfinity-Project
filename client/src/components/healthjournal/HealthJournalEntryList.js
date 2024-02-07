@@ -8,8 +8,8 @@ function HealthJournalEntryList() {
       method: "GET",
       credentials: "include", // Important for session handling, especially for cross-origin requests
       headers: {
-        Authorization: 'Bearer ' + sessionStorage.getItem('access_token')
-      }
+        Authorization: "Bearer " + sessionStorage.getItem("access_token"),
+      },
     })
       .then((response) => {
         if (!response.ok) {
@@ -24,7 +24,7 @@ function HealthJournalEntryList() {
       .catch((error) => {
         console.error("Error fetching health journal entries:", error);
       });
-  }, []); // The empty dependency array ensures this effect runs once on component mount
+  }, []);
 
   return (
     <div>
