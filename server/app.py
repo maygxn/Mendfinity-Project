@@ -2,7 +2,32 @@ from config import app
 from flask import jsonify, request, make_response, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from models import db, Patient, Exercise, FavoriteExercise, HealthJournalEntry
+# create the hashing stuff for us 
+from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+                               unset_jwt_cookies, jwt_required, JWTManager, decode_token
 
+# token.js import getToken() 
+# 
+
+jwt = JWTManager(app)
+
+def get_user_id(request):
+    ''' 
+    get the actual user_id to query database
+
+    1. get headers
+    2. get the authorization value (a.k.a token) (without the 'Bearer ' string)
+    3. decode the token (which returns a dictionary)
+    4. get the specific value from dictionary 'sub' (short for subject)
+    5. then you have your id
+    '''
+    headers = request.headers 
+    access_token = headers.get('Authorization')
+
+    #unhash access_token
+    token = access_token.split(' ')[1]
+    patient_id = decode_token(token)["sub"]
+    return patient_id
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -12,20 +37,24 @@ def register():
         username = data.get('username')
         password = data.get('password')
 
-        if not username or not password:
-            return jsonify({"error": "Username and password are required"}), 400
-
         existing_patient = Patient.query.filter_by(username=username).first()
         if existing_patient:
             return jsonify({"error": "User already exists"}), 400
 
+        #try/except
         new_patient = Patient(username=username)
         new_patient.set_password(password)  # This should correctly hash the password
-
         db.session.add(new_patient)
         db.session.commit()
 
-        return jsonify({"message": "Registered successfully"}), 200
+        #hashing here via flask_jwt_extended 
+        access_token = create_access_token(identity=new_patient.id)
+        response = {"access_token":access_token}
+        if not username or not password:
+            return jsonify({"error": "Username and password are required"}), 400
+
+
+        return jsonify(response), 200
 
     except Exception as e:
         # Improved logging for debugging
@@ -45,9 +74,14 @@ def login():
     if not patient or not patient.check_password(password):
         return {"error": "Invalid username or password"}, 401
 
-    session['patient_id'] = patient.id  # Store the patient's ID in the session
+    # not using sessions on backend anymore
+    # using localStorage's jwt tokens on frontend 
+    # session['patient_id'] = patient.id  # Store the patient's ID in the session
 
-    return {"message": "Logged in successfully", "patient_id": patient.id}, 200
+    access_token = create_access_token(identity=patient.id)
+    response = {"access_token":access_token}
+
+    return jsonify(response), 200
 
 
 @app.route('/logout', methods=['POST'])
@@ -59,6 +93,7 @@ def logout():
 # list all patients
 @app.route("/patients", methods=['GET', 'POST'])
 def patients():
+
     if request.method == "GET":
 
         patients = Patient.query.all()
@@ -233,12 +268,26 @@ def patient_favorite_exercises(patient_id):
     return response
 
 # CRUD for health journal entry for patient
+'''
+@jwt_required necessary for flask-jwt-extended. it will check for the header as follows:
+Authorization: 'Bearer ' + sessionStorage.getItem('access_token')
+'BEARER' IS DEFAULT DO NOT  CHANGE
+
+
+'''
 @app.route('/health-journal-entries', methods=['GET', 'POST'])
+@jwt_required() # NEED THIS WHENEVER YOU PASS IN AUTHORIZATION IN HEADERS
 def health_journal_entries():
-    # Retrieve patient_id from the session
-    patient_id = session.get('patient_id')
+    #Retrieve patient_id from the session
+    #patient_id = session.get('patient_id')
+
+    ''' 
+    get_user_id contains the jwt (see up top)
+    '''
+    patient_id = get_user_id(request)
+
     if not patient_id:
-        return jsonify({"error": f'User {patient_id} not logged in for session {str(session)}'}), 401
+        return jsonify({"error": f'User {patient_id} not logged in for front end sessionStorage'}), 401
 
     if request.method == 'GET':
         # Use the patient_id from the session to filter journal entries

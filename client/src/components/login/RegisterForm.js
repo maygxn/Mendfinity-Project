@@ -38,15 +38,16 @@ function RegisterForm() {
         body: JSON.stringify(values),
       })
         .then((res) =>
-          res.ok ? res.json() : Promise.reject("Failed to login.")
+          res.ok ? res.json() : Promise.reject("Failed to register.")
         )
         .then((data) => {
           setUser(data); // This will trigger the useEffect above
+          sessionStorage.setItem('access_token', data.access_token)
           console.log(data);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
-          setError("Login failed. Please try again."); // Set error state
+          setError("Registration failed. Please try again."); // Set error state
         })
         .finally(() => {
           setSubmitting(false); // Always reset submitting state

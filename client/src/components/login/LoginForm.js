@@ -42,6 +42,7 @@ function LoginForm() {
         )
         .then((data) => {
           setUser(data); // This will trigger the useEffect above
+          sessionStorage.setItem('access_token', data.access_token)
           console.log(data);
         })
         .catch((error) => {

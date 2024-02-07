@@ -7,6 +7,9 @@ function HealthJournalEntryList() {
     fetch("http://127.0.0.1:5555/health-journal-entries", {
       method: "GET",
       credentials: "include", // Important for session handling, especially for cross-origin requests
+      headers: {
+        Authorization: 'Bearer ' + sessionStorage.getItem('access_token')
+      }
     })
       .then((response) => {
         if (!response.ok) {
