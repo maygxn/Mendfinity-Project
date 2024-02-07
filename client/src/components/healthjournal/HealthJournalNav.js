@@ -20,6 +20,11 @@ function HealthJournalNav() {
     navigate("/FavoriteExercises");
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("access_token");
+    navigate("/");
+  };
+
   return (
     <nav className="navbar">
       <ul>
@@ -39,6 +44,9 @@ function HealthJournalNav() {
           <button onClick={navigateToFavoriteExercises}>
             Favorite Exercises
           </button>
+        </li>
+        <li>
+          <button onClick={handleLogout}>Logout</button>
         </li>
       </ul>
     </nav>
