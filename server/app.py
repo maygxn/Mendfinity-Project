@@ -1,4 +1,5 @@
 from config import app
+from datetime import datetime
 from flask import jsonify, request, make_response, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from models import db, Patient, Exercise, FavoriteExercise, HealthJournalEntry
@@ -276,73 +277,62 @@ Authorization: 'Bearer ' + sessionStorage.getItem('access_token')
 
 '''
 @app.route('/health-journal-entries', methods=['GET', 'POST'])
-@jwt_required() # NEED THIS WHENEVER YOU PASS IN AUTHORIZATION IN HEADERS
+@jwt_required()
 def health_journal_entries():
-    #Retrieve patient_id from the session
-    #patient_id = session.get('patient_id')
-
-    ''' 
-    get_user_id contains the jwt (see up top)
-    '''
-    patient_id = get_user_id(request)
-
-    if not patient_id:
-        return jsonify({"error": f'User {patient_id} not logged in for front end sessionStorage'}), 401
+    current_user_id = get_jwt_identity()
+    if not current_user_id:
+        return jsonify({"error": f'User {current_user_id} not logged in for front end sessionStorage'}), 401
 
     if request.method == 'GET':
-        # Use the patient_id from the session to filter journal entries
-        entries = HealthJournalEntry.query.filter_by(patient_id=patient_id).all()
+        entries = HealthJournalEntry.query.filter_by(patient_id=current_user_id).all()
         entries_dict = [entry.to_dict() for entry in entries]
         return jsonify(entries_dict), 200
 
     elif request.method == 'POST':
-        # No need to get patient_id from form_data, as it's already in the session
         form_data = request.get_json()
         new_entry = HealthJournalEntry(
-            patient_id=patient_id,
+            patient_id=current_user_id,
             content=form_data.get('content'),
-            entry_date=form_data.get('entry_date')
+            entry_date = datetime.strptime(form_data['entry_date'], '%Y-%m-%d').date()
         )
         db.session.add(new_entry)
         db.session.commit()
         return jsonify(new_entry.to_dict()), 201
 
-    # Fallback for unsupported methods
     return jsonify({"error": "Method not supported"}), 405
 
 
 @app.route('/health-journal-entries/<int:entry_id>', methods=['PATCH', 'DELETE'])
+@jwt_required()
 def health_journal_entry_by_id(entry_id):
+    current_user_id = get_jwt_identity()
     entry = HealthJournalEntry.query.get(entry_id)
 
     if not entry:
-        response = make_response(
-            jsonify({"error": "Health journal entry not found"}),
-            404
-        )
+        return jsonify({"error": "Health journal entry not found"}), 404
+
     elif request.method == 'PATCH':
         form_data = request.get_json()
+
+        if 'entry_date' in form_data:
+            try:
+                entry_date = datetime.strptime(form_data['entry_date'], '%Y-%m-%d').date()
+                form_data['entry_date'] = entry_date
+            except ValueError as e:
+                return jsonify({"error": "Invalid date format"}), 400
 
         for key, value in form_data.items():
             if hasattr(entry, key):
                 setattr(entry, key, value)
 
         db.session.commit()
+        return jsonify(entry.to_dict()), 200
 
-        response = make_response(
-            entry.to_dict(),
-            200
-        )
     elif request.method == 'DELETE':
         db.session.delete(entry)
         db.session.commit()
+        return jsonify({"message": "Entry deleted successfully"}), 204
 
-        response = make_response(
-        {"message": "Entry deleted successfully"},
-            204
-        )
-
-    return response
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

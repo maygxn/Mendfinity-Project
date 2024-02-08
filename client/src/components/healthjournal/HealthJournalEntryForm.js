@@ -8,24 +8,31 @@ function HealthJournalEntryForm({
   onSaveEntry,
   initialEntry = null,
 }) {
+  // Define the form's validation schema using Yup
   const validationSchema = yup.object({
     entry_date: yup.date().required("Entry date is required."),
     content: yup.string().required("Content is required."),
   });
 
+  // Initialize Formik for form handling
   const formik = useFormik({
     initialValues: {
       entry_date: initialEntry ? initialEntry.entry_date : "",
       content: initialEntry ? initialEntry.content : "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      onSaveEntry(values);
+    onSubmit: (values, { resetForm }) => {
+      onSaveEntry(values, initialEntry ? initialEntry.id : null); // Pass the entry ID if updating
       setShowForm(false);
+      resetForm(); // Reset the form after successful submission
     },
   });
 
-  const handleExit = () => setShowForm(false);
+  // Handle form cancellation and reset form state
+  const handleExit = () => {
+    setShowForm(false);
+    formik.resetForm();
+  };
 
   return (
     <div id="journalEntryForm" style={{ display: showForm ? "block" : "none" }}>
