@@ -1,4 +1,3 @@
-// ExercisesPage.js
 import React, { useState, useEffect } from "react";
 import ExercisesSideBar from "./ExercisesSideBar";
 import ExercisesCards from "./ExercisesCards";
@@ -12,6 +11,7 @@ function ExercisesPage() {
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [search, setSearch] = useState('');
+    const [favoritedExercises, setFavoritedExercises] = useState([]);
 
     useEffect(() => {
         fetchExercises();
@@ -38,9 +38,9 @@ function ExercisesPage() {
 
     const saveExercise = (exercise) => {
         const method = selectedExercise ? "PATCH" : "POST";
-        const apiEndpoint = selectedExercise ? `${url}/exercises/${selectedExercise.id}` : `${url}/exercises`;
+        const appEndpoint = selectedExercise ? `${url}/exercises/${selectedExercise.id}` : `${url}/exercises`;
 
-        fetch(apiEndpoint, {
+        fetch(appEndpoint, {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(exercise),
@@ -67,6 +67,15 @@ function ExercisesPage() {
         setSearch(e.target.value);
     };
 
+    const handleFavoriteToggle = (exerciseId) => {
+        setFavoritedExercises(prevExercises => {
+            if (prevExercises.includes(exerciseId)) {
+                return prevExercises.filter(id => id !== exerciseId);
+            } else {
+                return [...prevExercises, exerciseId];
+            }
+        });
+    };
 
     const filteredExercises = exercises.filter(exercise => exercise.name.toUpperCase().includes(search.toUpperCase()));
 
@@ -92,6 +101,8 @@ function ExercisesPage() {
                         exercise={exercise}
                         onEdit={() => handleEditExerciseClick(exercise)}
                         onDelete={() => deleteExercise(exercise.id)}
+                        isFavorited={favoritedExercises.includes(exercise.id)}
+                        onFavoriteToggle={handleFavoriteToggle}
                     />
                 ))}
             </div>

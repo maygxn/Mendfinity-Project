@@ -22,13 +22,15 @@ function HealthJournalEntryForm({
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      onSaveEntry(values, initialEntry ? initialEntry.id : null); // Pass the entry ID if updating
+      // pass the entry ID if updating
+      onSaveEntry(values, initialEntry ? initialEntry.id : null);
       setShowForm(false);
-      resetForm(); // Reset the form after successful submission
+      // reset the form after successful submission
+      resetForm(); 
     },
   });
 
-  // Handle form cancellation and reset form state
+  // handle form cancellation and reset form state
   const handleExit = () => {
     setShowForm(false);
     formik.resetForm();

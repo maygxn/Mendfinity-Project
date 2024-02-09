@@ -11,8 +11,8 @@ function LoginForm() {
 
   useEffect(() => {
     if (user) {
-      console.log(user);
-      navigate("/MainPage"); // Navigate on user update if not null
+      // navigate on user update if not null
+      navigate("/MainPage");
     }
   }, [user, navigate]);
 
@@ -43,7 +43,6 @@ function LoginForm() {
         .then((data) => {
           setUser(data); // This will trigger the useEffect above
           sessionStorage.setItem('access_token', data.access_token)
-          console.log(data);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);

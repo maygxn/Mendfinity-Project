@@ -221,52 +221,62 @@ def exercises_by_id(id):
 
 
 # manage favorite exercises
-@app.route("/favorite-exercises", methods=['GET', 'POST'])
-def favorite_exercises():
-    if request.method == 'GET':
-        favorites = FavoriteExercise.query.all()
+@app.route("/favorite-exercises", methods=['GET'])
+@jwt_required()
+def get_favorite_exercises():
+    current_user_id = get_jwt_identity()
+    favorites = FavoriteExercise.query.filter_by(patient_id=current_user_id).all()
+    favorites_list = [favorite.exercise.to_dict() for favorite in favorites]
+    return jsonify(favorites_list), 200
 
-        favorites_dict = [favorite.to_dict() for favorite in favorites]
+@app.route("/favorite-exercises", methods=['POST'])
+@jwt_required()
+def add_favorite_exercise():
+    current_user_id = get_jwt_identity()
+    data = request.get_json()
 
-        response = make_response(
-            favorites_dict,
-            200
-        )
-    elif request.method == 'POST':
+    if not data or 'exercise_id' not in data:
+        return jsonify({"error": "exercise_id is required"}), 400
 
-        form_data = request.get_json()
+    exercise_id = data['exercise_id']
+    # check if the exercise exists
+    exercise = Exercise.query.filter_by(id=exercise_id).first()
+    if not exercise:
+        return jsonify({"error": f"Exercise with id {exercise_id} does not exist"}), 404
 
-        new_favorite = FavoriteExercise(
-            patient_id = form_data['patient_id'],
-            exercise_id = form_data['exercise_id']
-        )
+    # check for existing favorite
+    existing_favorite = FavoriteExercise.query.filter_by(patient_id=current_user_id, exercise_id=exercise_id).first()
+    if existing_favorite:
+        return jsonify({"error": "This exercise is already favorited"}), 409
+
+    try:
+        new_favorite = FavoriteExercise(patient_id=current_user_id, exercise_id=exercise_id)
         db.session.add(new_favorite)
         db.session.commit()
+        return jsonify(new_favorite.to_dict()), 201
+        # catches exception, rollback if exception caught
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Failed to add favorite exercise", "details": str(e)}), 500
 
-        response = make_response(
-            new_favorite.to_dict(),
-            201
-        )
-    else:
-        response = make_response(
-            {"error" : "invalid method"},
-            400
-        )
 
-        return response
+@app.route("/favorite-exercises/<int:exercise_id>", methods=['DELETE'])
+@jwt_required()
+def delete_favorite_exercise(exercise_id):
+    current_user_id = get_jwt_identity()
+    favorite = FavoriteExercise.query.filter_by(patient_id=current_user_id, exercise_id=exercise_id).first()
+    if not favorite:
+        return jsonify({"error": "Favorite exercise not found or already removed"}), 404
+    try:
+        db.session.delete(favorite)
+        db.session.commit()
+        return jsonify({"message": "Favorite exercise removed successfully"}), 200
+        # catches exception, rollback if exception caught
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Failed to remove favorite exercise", "details": str(e)}), 500
 
-# get all favorite exercises for specific patient
-@app.route("/patients/<int:patient_id>/favorite-exercises", methods=['GET'])
-def patient_favorite_exercises(patient_id):
-    favorites = FavoriteExercise.query.filter_by(patient_id=patient_id).all()
 
-    favorites_dict = [favorite.to_dict(rules = ("-health_journal_entries", "-patient",)) for favorite in favorites]
-
-    response = make_response(
-        favorites_dict,
-        200
-    )
-    return response
 
 # CRUD for health journal entry for patient
 '''

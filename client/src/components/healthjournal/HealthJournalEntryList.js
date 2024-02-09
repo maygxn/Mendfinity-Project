@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 function HealthJournalEntryList() {
-  const [entries, setEntries] = useState([]); // Initialize state to hold entries
+  // initialize state to hold entries
+  const [entries, setEntries] = useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5555/health-journal-entries", {
@@ -18,8 +19,7 @@ function HealthJournalEntryList() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        setEntries(data); // Update state with fetched entries
+        setEntries(data);
       })
       .catch((error) => {
         console.error("Error fetching health journal entries:", error);

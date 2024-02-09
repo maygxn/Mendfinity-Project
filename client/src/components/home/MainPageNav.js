@@ -22,6 +22,8 @@ function MainPageNav() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("favoritesLastUpdated");
+    sessionStorage.removeItem("favoritedExercises");
     navigate("/");
   };
 

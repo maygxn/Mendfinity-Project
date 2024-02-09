@@ -1,34 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function ExercisesCards({ exercise, onEdit, onDelete }) {
+    // initialize favorited state from sessionStorage
+    const initialFavorited = JSON.parse(sessionStorage.getItem('favoritedExercises') || '[]').includes(exercise.id);
+    const [isFavorited, setIsFavorited] = useState(initialFavorited);
 
     const handleFavoriteClick = () => {
-        fetch(`http://127.0.0.1:5555/patients/favorite-exercises`, {
-            method: 'POST',
+        const method = isFavorited ? 'DELETE' : 'POST';
+        const url = isFavorited ? `http://127.0.0.1:5555/favorite-exercises/${exercise.id}` : `http://127.0.0.1:5555/favorite-exercises`;
+
+        const requestOptions = {
+            method,
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
             },
-            body: JSON.stringify(exercise),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
+            body: isFavorited ? null : JSON.stringify({ exercise_id: exercise.id }),
+        };
+
+        fetch(url, requestOptions)
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to update favorite status');
+                setIsFavorited(!isFavorited);
+
+                // update sessionStorage with new state
+                let favoritedExercises = JSON.parse(sessionStorage.getItem('favoritedExercises') || '[]');
+                if (isFavorited) {
+                    // remove unfavorited exercise
+                    favoritedExercises = favoritedExercises.filter(id => id !== exercise.id);
+                } else {
+                    // add favorited exercise
+                    favoritedExercises.push(exercise.id);
+                }
+                sessionStorage.setItem('favoritedExercises', JSON.stringify(favoritedExercises));
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            .catch(error => console.error('Error:', error));
     };
 
     return (
         <div className="card">
             <div className='image-container'>
-                <img src={exercise.image_url} alt={exercise.name}></img>
+                <img src={exercise.image_url} alt={exercise.name} />
             </div>
             <h3>{exercise.name}</h3>
             <p>{exercise.description}</p>
             <button onClick={() => onEdit(exercise)}>Edit</button>
             <button onClick={() => onDelete(exercise.id)}>Delete</button>
-            <button onClick={handleFavoriteClick}>Favorite</button> {/* Add this line */}
+            <button onClick={handleFavoriteClick} disabled={isFavorited}>
+                {isFavorited ? 'Favorited' : 'Favorite'}
+            </button>
         </div>
     );
 }

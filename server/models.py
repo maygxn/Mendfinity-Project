@@ -35,7 +35,7 @@ class Exercise(db.Model, SerializerMixin):
     image_url = db.Column(db.String, nullable=True)
 
     # Relationships
-    favorite_exercises = db.relationship('FavoriteExercise', back_populates='exercise',)
+    favorite_exercises = db.relationship('FavoriteExercise', back_populates='exercise', cascade="all, delete-orphan")
 
     # Serialization rules
     serialize_rules = ('-favorite_exercises.exercise',)
