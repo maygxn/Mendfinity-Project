@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ExercisesSideBar from "./ExercisesSideBar";
 import ExercisesCards from "./ExercisesCards";
-import ExercisesNav from "./ExercisesNav";
 import ExercisesForm from "./ExercisesForm";
-import './ExercisesPage.css';
 
 function ExercisesPage() {
     const url = "http://127.0.0.1:5555";
@@ -77,13 +75,13 @@ function ExercisesPage() {
         });
     };
 
+
     const filteredExercises = exercises.filter(exercise => exercise.name.toUpperCase().includes(search.toUpperCase()));
 
     return (
         <div>
-            <ExercisesNav />
             <ExercisesSideBar handleNewExerciseClick={handleAddExerciseClick} search={search} updateSearch={updateSearch} />
-            <div className="form-container">
+            <div className="exercise-form-container">
                 {showForm && (
                     <ExercisesForm
                         showForm={showForm}
@@ -94,7 +92,8 @@ function ExercisesPage() {
                     />
                 )}
             </div>
-            <div className="main-content">
+            {/* Wrap exercise cards in a grid container */}
+            <div className="exercise-grid">
                 {filteredExercises.map((exercise) => (
                     <ExercisesCards
                         key={exercise.id}

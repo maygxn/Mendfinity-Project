@@ -25,7 +25,7 @@ function ExerciseForm({ showForm, setShowForm, onSaveExercise, initialExercise =
     const handleExit = () => setShowForm(false);
 
     return (
-        <div id="exerciseForm" style={{ display: showForm ? 'block' : 'none' }}>
+        <div id="exerciseForm" className={`exercise-form ${showForm ? 'active' : ''}`}>
             <form onSubmit={formik.handleSubmit}>
                 <div>
                     <label htmlFor="name">Exercise Name</label>

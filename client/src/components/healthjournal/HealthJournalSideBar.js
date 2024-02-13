@@ -23,11 +23,11 @@ function HealthJournalSideBar({ entries, handleNewJournalEntryClick, selectEntry
       />
       <button onClick={handleNewJournalEntryClick} id="composedbutton">Add New Journal Entry</button>
       <ul>
-        {filteredEntries.map((entry, index) => (
-          <li key={index} onClick={() => selectEntry(entry)}>
-            {entry.entry_date} - {entry.content?.substring(0, 100)}{/* Display more content for clarity */}
-          </li>
-        ))}
+      {filteredEntries.map((entry, index) => (
+        <li key={index} onClick={() => selectEntry(entry)}>
+          {entry.entry_date}
+        </li>
+      ))}
       </ul>
     </nav>
   );

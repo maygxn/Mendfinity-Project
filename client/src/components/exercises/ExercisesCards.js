@@ -38,8 +38,8 @@ function ExercisesCards({ exercise, onEdit, onDelete }) {
     };
 
     return (
-        <div className="card">
-            <div className='image-container'>
+        <div className="exercise-card">
+            <div className='exercise-image-container'>
                 <img src={exercise.image_url} alt={exercise.name} />
             </div>
             <h3>{exercise.name}</h3>

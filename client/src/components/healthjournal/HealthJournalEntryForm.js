@@ -38,7 +38,7 @@ function HealthJournalEntryForm({
 
   return (
     <div id="journalEntryForm" style={{ display: showForm ? "block" : "none" }}>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} className="health-journal-entry-form">
         <div>
           <label htmlFor="entry_date">Entry Date</label>
           <input

@@ -12,7 +12,7 @@ function LoginForm() {
   useEffect(() => {
     if (user) {
       // navigate on user update if not null
-      navigate("/MainPage");
+      navigate("/Dashboard");
     }
   }, [user, navigate]);
 
@@ -43,6 +43,8 @@ function LoginForm() {
         .then((data) => {
           setUser(data); // This will trigger the useEffect above
           sessionStorage.setItem('access_token', data.access_token)
+          sessionStorage.setItem('isLoggedIn', 'true')
+          navigate("/Dashboard");
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -55,9 +57,9 @@ function LoginForm() {
   });
 
   return (
-    <div id="login_form">
-      <form onSubmit={formik.handleSubmit}>
-        <div>
+    <div className="generalContainer">
+      <form onSubmit={formik.handleSubmit} className="formContainer">
+      <div className="fieldContainer">
           <label htmlFor="username">Username</label>
           <input
             id="username"
@@ -67,9 +69,9 @@ function LoginForm() {
             value={formik.values.username}
             placeholder="Username"
           />
-          {formik.errors.username && <div>{formik.errors.username}</div>}
+          {formik.errors.username && <div className="error">{formik.errors.username}</div>}
         </div>
-        <div>
+        <div className="fieldContainer">
           <label htmlFor="password">Password</label>
           <input
             id="password"
@@ -81,7 +83,7 @@ function LoginForm() {
           />
           {formik.errors.password && <div>{formik.errors.password}</div>}
         </div>
-        {error && <div>{error}</div>}
+        {error && <div className="error">{error}</div>}
         <button type="submit" disabled={submitting}>
           {submitting ? "Logging in..." : "Submit"}
         </button>

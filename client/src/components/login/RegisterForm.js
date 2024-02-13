@@ -11,8 +11,7 @@ function RegisterForm() {
 
   useEffect(() => {
     if (user) {
-      console.log(user);
-      navigate("/MainPage"); // Navigate on user update if not null
+      navigate("/Dashboard"); // Navigate on user update if not null
     }
   }, [user, navigate]);
 
@@ -43,7 +42,8 @@ function RegisterForm() {
         .then((data) => {
           setUser(data); // This will trigger the useEffect above
           sessionStorage.setItem('access_token', data.access_token)
-          console.log(data);
+          sessionStorage.setItem('isLoggedIn', 'true'); // Set login flag
+          navigate("/Dashboard");
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -56,9 +56,9 @@ function RegisterForm() {
   });
 
   return (
-    <div id="login_form">
-      <form onSubmit={formik.handleSubmit}>
-        <div>
+    <div className="generalContainer">
+      <form onSubmit={formik.handleSubmit} className="formContainer">
+      <div className="fieldContainer">
           <label htmlFor="username">Username</label>
           <input
             id="username"
@@ -68,9 +68,9 @@ function RegisterForm() {
             value={formik.values.username}
             placeholder="Username"
           />
-          {formik.errors.username && <div>{formik.errors.username}</div>}
+          {formik.errors.username && <div className="error">{formik.errors.username}</div>}
         </div>
-        <div>
+        <div className="fieldContainer">
           <label htmlFor="password">Password</label>
           <input
             id="password"
@@ -82,7 +82,7 @@ function RegisterForm() {
           />
           {formik.errors.password && <div>{formik.errors.password}</div>}
         </div>
-        {error && <div>{error}</div>}
+        {error && <div className="error">{error}</div>}
         <button type="submit" disabled={submitting}>
           {submitting ? "Logging in..." : "Submit"}
         </button>

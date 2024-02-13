@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import HealthJournalNav from './HealthJournalNav';
 import HealthJournalSideBar from './HealthJournalSideBar';
 import HealthJournalEntryDetail from './HealthJournalEntryDetail';
 import HealthJournalEntryForm from './HealthJournalEntryForm';
-import './HealthJournalPage.css';
 
 function HealthJournalPage() {
   const [entries, setEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [search, setSearch] = useState("");
 
   // Fetches entries from the backend
   const fetchEntries = () => {
@@ -54,7 +53,13 @@ function HealthJournalPage() {
         Authorization: "Bearer " + sessionStorage.getItem("access_token"),
       },
     })
-    .then(() => fetchEntries()) // Refresh the entries list
+    .then(() => {
+      // Check if the deleted entry is the currently selected one
+      if (selectedEntry && selectedEntry.id === entryId) {
+        setSelectedEntry(null); // Reset the selected entry to null
+      }
+      fetchEntries(); // Refresh the entries list
+    })
     .catch(error => console.error("Error deleting the entry:", error));
   };
 
@@ -70,14 +75,21 @@ function HealthJournalPage() {
     setShowForm(false); // Ensure the form is not shown if an entry is selected for viewing
   };
 
+  const updateSearch = (newSearch) => {
+    setSearch(newSearch);
+  };
+
+
   return (
     <>
-      <HealthJournalNav onAddButtonClick={handleNewJournalEntryClick} />
-      <div className='app-container'>
+      <div className='health-journal-page'>
+      <div className="app-container">
         <HealthJournalSideBar
           entries={entries}
           handleNewJournalEntryClick={handleNewJournalEntryClick}
           selectEntry={handleEntrySelect}
+          search={search}
+          updateSearch={updateSearch}
         />
         {showForm ? (
           <HealthJournalEntryForm
@@ -93,6 +105,7 @@ function HealthJournalPage() {
             onDelete={() => handleDeleteEntry(selectedEntry.id)}
           />
         ) : <div>Select an entry to view its details or create a new entry.</div>}
+      </div>
       </div>
     </>
   );

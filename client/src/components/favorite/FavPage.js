@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import FavExerciseNav from "./FavExerciseNav";
 
 function FavPage() {
     const [favorites, setFavorites] = useState([]);
@@ -60,7 +59,6 @@ function FavPage() {
 
     return (
         <div>
-            <FavExerciseNav />
             <h2>Favorite Exercises</h2>
             <div>
                 {favorites.length > 0 ? (
