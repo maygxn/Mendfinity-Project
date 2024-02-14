@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import logoImage from './MENDFINITY.png';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ function Navbar() {
 
   return (
     <nav className="navbarContainer">
-      <div className="navbarLogo">YourLogo</div>
+      <div className="navbarLogo">
+        <img src={logoImage} alt="Logo" className="navbar-logo"/>
+      </div>
       <div className="navbarLinks">
         <ul>
           <li><h1>Mendfinity</h1></li>
