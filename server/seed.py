@@ -183,9 +183,26 @@ if __name__ == '__main__':
 
         # Create health journal entries for patients
         health_journal_entries = [
-            HealthJournalEntry(patient=patients[0], entry_date=datetime.utcnow(), content="Feeling great today!"),
-            HealthJournalEntry(patient=patients[0], entry_date=datetime.utcnow(), content="Worked out for 30 minutes."),
-            HealthJournalEntry(patient=patients[1], entry_date=datetime.utcnow(), content="Rest day.")
+            HealthJournalEntry(patient=patients[0], entry_date=datetime.utcnow(), content="""
+                Feeling great today! The morning started with a refreshing jog around the park, 
+                followed by a healthy breakfast of oats and fruits. The new diet plan seems to be 
+                working wonders for my energy levels. Additionally, I've noticed an improvement in my sleep quality, 
+                likely a result of the increased physical activity. It's rewarding to see positive changes 
+                from my efforts to lead a healthier lifestyle.
+                """),
+            HealthJournalEntry(patient=patients[0], entry_date=datetime.utcnow(), content="""
+                Worked out for 30 minutes today, focusing mainly on strength training and core exercises. 
+                The session was challenging but fulfilling. I followed the workout with a 15-minute meditation 
+                to help with mental clarity and stress reduction. It's important for me to balance physical 
+                fitness with mental well-being, and today felt like a success on both fronts.
+                """),
+            HealthJournalEntry(patient=patients[1], entry_date=datetime.utcnow(), content="""
+                Today was a designated rest day. Taking time to recover is crucial in any fitness regimen, 
+                and I'm learning to listen to my body's needs. Instead of my usual workout, I opted for 
+                gentle yoga stretches and deep breathing exercises. It's a different kind of satisfaction 
+                to give the body and mind the rest they deserve. I also spent some time planning healthier 
+                meal options for the week ahead, focusing on nutrition and how it supports my recovery and fitness goals.
+                """)
         ]
         db.session.add_all(health_journal_entries)
         db.session.commit()

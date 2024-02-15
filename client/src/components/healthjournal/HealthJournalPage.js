@@ -104,7 +104,7 @@ function HealthJournalPage() {
             onEdit={() => setShowForm(true)}
             onDelete={() => handleDeleteEntry(selectedEntry.id)}
           />
-        ) : <div>Select an entry to view its details or create a new entry.</div>}
+        ) : <div className="selectTitle">Select an entry to view its details or create a new entry.</div>}
       </div>
       </div>
     </>

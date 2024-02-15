@@ -7,7 +7,7 @@ function RegisterPage() {
     <div className="generalContainer">
       <div className="formContainer">
         <div>
-          <div>Register</div>
+          <div className="loginName">Register</div>
           <RegisterForm />
           <p>Have an account? <Link to="/">Login</Link></p>
         </div>

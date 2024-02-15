@@ -5,52 +5,83 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+    overflow-y: scroll; /* Always shows the vertical scrollbar */
+  }
 
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f9f9;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  background: linear-gradient(to right, rgba(143, 188, 187, 0.9), rgba(143, 188, 143, 0.9));
   overflow-x: hidden;
   padding-top: 60px;
 }
 
 .navbarContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #000000;
-  color: white;
-  padding: 0 20px;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-}
-
-.navbarLogo, .navbarLinks ul, .logoutButton {
-  display: flex;
-  align-items: center;
-}
-
-.navbarLogo h1 {
-  margin-left: 20px;
-}
-
-.navbarLinks ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
-}
-
-.navbarLinks ul li {
-  padding: 0 15px;
-}
-
-.logoutButton {
-  margin-left: auto;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000000;
+    color: white;
+    padding: 0 20px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbarSection, .navbarLinks, .logoutButton {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-logo {
+    height: 50px; /* Ensures logo size is controlled */
+  }
+  
+  .navbarSection h1 {
+    margin-left: 10px; /* Space between logo and title */
+    font-size: 20px; /* Adjust as needed */
+  }
+  
+  .navbarLinks {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1; /* Allows the links to occupy the available space for centering */
+    padding: 0;
+  }
+  
+  .navbarLinks li button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px; /* Increased font size for better visibility */
+    font-weight: bold; /* Makes the font bold */
+    padding: 12px 15px; /* Adjust padding to ensure vertical centering */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    display: inline-block; /* Ensures proper spacing and alignment */
+    line-height: 1; /* Adjusts line height for better vertical alignment */
+  }
+  
+  .navbarLinks li button:hover {
+    background-color: #1a1a1a; /* Subtle hover effect */
+  }
+  
+  .logoutButton button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px; /* Match other buttons */
+    padding: 12px 15px; /* Consistent padding */
+    font-weight: bold;
+  }
+  
+  .logoutButton button:hover {
+    background-color: #1a1a1a; /* Consistent hover effect */
+  }
 
 input[type="text"], input[type="password"], input[type="email"], textarea {
   width: 100%;
@@ -309,7 +340,7 @@ button:hover {
     width: 300px;
     max-height: 80vh;
     padding: 10px;
-    background-color: white;
+    background-color: #f4f9f9;
     border: 2px solid #ccc;
     border-radius: 8px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
@@ -456,21 +487,23 @@ button:hover {
 }
 
 #hjbody {
-    width: 80%;
-    height: auto;
-    margin: 0 auto;
-    padding: 40px;
-    max-width: 1200px;
-}
-
-@media (max-width: 768px) {
+    background-color: #ffffff; /* Card background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    padding: 20px; /* Inner spacing */
+    margin: 20px auto; /* Centering the card with some margin */
+    max-width: 1200px; /* Max width */
+    width: 80%; /* Width relative to the parent */
+  }
+  
+  @media (max-width: 768px) {
     #hjbody {
       padding: 20px;
-      margin-top: 40px;
+      margin-top: 20px;
       margin-bottom: 20px;
-      height: auto;
+      width: 90%; /* Slightly wider on smaller screens */
     }
-}
+  }
 
 .health-journal-entry-form textarea#content {
     width: 100%;
@@ -489,9 +522,6 @@ button:hover {
     word-wrap: break-word;
 }
 
-#date {
-    margin-bottom: 20px;
-}
 
 #content {
     margin-bottom: 30px;
@@ -499,9 +529,37 @@ button:hover {
 }
 
 #hjbody button:first-of-type {
-    margin-top: 30px;
+    margin-top: 400px;
 }
 
+#date, #content {
+  margin-bottom: 100px; /* Adds space below each container */
+}
+
+#journalEntryForm {
+    background-color: #ffffff; /* Card background color, matching #hjbody */
+    border-radius: 8px; /* Rounded corners, matching #hjbody */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth, matching #hjbody */
+    padding: 20px; /* Internal spacing, matching #hjbody */
+    margin: 20px auto; /* Center alignment and spacing from other content */
+    max-width: 1200px; /* Maximum width to match #hjbody */
+    width: 80%; /* Width relative to its parent, matching #hjbody */
+    display: block; /* Ensures the form displays as a block element */
+  }
+  
+  /* Adjusting for smaller screens, similar to #hjbody for consistency */
+  @media (max-width: 768px) {
+    #journalEntryForm {
+      padding: 20px; /* Keep consistent padding for smaller devices */
+      margin-top: 20px;
+      margin-bottom: 20px;
+      width: 90%; /* Allows the card to take more screen space on smaller devices */
+    }
+  }
+
+  #journalEntryForm button:first-of-type {
+    margin-top: 400px;
+}
 
 
 /* FOR DASHBOARD */
@@ -531,6 +589,7 @@ button:hover {
     flex-direction: column;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    overflow: hidden; /* Add this line */
 }
 
 .card * {
@@ -567,7 +626,7 @@ button:hover {
 }
 
 .card h2, .card ul li, .contact-info p {
-    color: #007bff;
+    color: rgb(81, 80, 80);
     margin-bottom: 16px;
 }
 
@@ -620,3 +679,29 @@ a:hover {
     height: 50px;
     width: auto;
 }
+
+.loginName {
+    font-size: 28px; /* Makes the font size larger */
+    font-weight: bold; /* Makes the font weight bold */
+    text-align: center; /* Centers the text */
+    margin-bottom: 20px; /* Adds some space below the element */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Specifies a nice, modern font family */
+    color: #333; /* Sets the font color */
+  }
+
+
+  .selectTitle {
+    text-align: center; /* Centers the text */
+    font-size: 30px; /* Enlarges the font */
+    width: 100%; /* Ensures the div takes the full width */
+    color: #000000; /* Example color - adjust as needed */
+    margin-top: 300px; /* Adds space at the top */
+  }
+
+  .favoriteExercisesTitle {
+    text-align: center; /* Centers the text */
+    font-size: 30px; /* Enlarges the font */
+    width: 100%; /* Ensures the div takes the full width */
+    color: #000000; /* Example color - adjust as needed */
+    margin-top: 20px; /* Adds space at the top */
+  }

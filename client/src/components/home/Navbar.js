@@ -21,19 +21,19 @@ function Navbar() {
 
   return (
     <nav className="navbarContainer">
-      <div className="navbarLogo">
+      <div className="navbarSection">
         <img src={logoImage} alt="Logo" className="navbar-logo"/>
+        <h1>Mendfinity</h1>
       </div>
-      <div className="navbarLinks">
-        <ul>
-          <li><h1>Mendfinity</h1></li>
+        <ul className="navbarLinks">
           <li><button onClick={navigateToDashboard}>Dashboard</button></li>
           <li><button onClick={navigateToExercises}>Exercises</button></li>
           <li><button onClick={navigateToHealthJournal}>Health Journal</button></li>
           <li><button onClick={navigateToFavoriteExercises}>Favorite Exercises</button></li>
-          <li><button onClick={handleLogout}>Logout</button></li>
         </ul>
-      </div>
+        <div className="logoutButton">
+          <button onClick={handleLogout}>Logout</button>
+        </div>
     </nav>
   );
 }

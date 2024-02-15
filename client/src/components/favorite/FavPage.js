@@ -59,15 +59,19 @@ function FavPage() {
 
     return (
         <div>
-            <h2>Favorite Exercises</h2>
-            <div>
+            <h2 className="favoriteExercisesTitle">Favorite Exercises</h2>
+            <div className="exercise-grid">
                 {favorites.length > 0 ? (
                     favorites.map((exercise) => (
-                        <div key={exercise.id} className="favorite-exercise">
-                            <img src={exercise.image_url} alt={exercise.name} style={{width: "100px", height: "100px"}} />
+                        <div key={exercise.id} className="exercise-card">
+                            <div className='exercise-image-container'>
+                            <img src={exercise.image_url} alt={exercise.name} />
+                            </div>
                             <h3>{exercise.name}</h3>
                             <p>{exercise.description}</p>
+                            <div className="exercise-buttons">
                             <button onClick={() => handleUnfavorite(exercise.id)}>Unfavorite</button>
+                            </div>
                         </div>
                     ))
                 ) : (

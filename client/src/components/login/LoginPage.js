@@ -7,7 +7,7 @@ function LoginPage() {
     <div className="generalContainer">
       <div className="formContainer">
         <div>
-          <div>Login</div>
+          <div className="loginName">Login</div>
           <LoginForm />
           <p>Don't have an account? <Link to="/Register">Register</Link></p>
         </div>
